@@ -32,6 +32,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Medicines API"}
+
+
 @app.get("/medicines")
 def get_all_meds():
     """
@@ -125,6 +130,31 @@ def delete_med(name: str = Form(...)):
     return {"error": "Medicine not found"}
 
 # Add your average function here
+@app.get("/average-price")
+def calculate_average_price():
+    """
+    This function calculates the average price of all medicines.
+    Returns:
+        dict: A dictionary containing the average price of all medicines.
+    """
+    with open('data.json', 'r') as meds:
+        current_db = json.load(meds)
+        medicines = current_db.get("medicines", [])
+
+        if not medicines:
+            return {"error": "No medicines available to calculate average price."}
+
+        # Filter out medicines with invalid or None prices
+        valid_prices = [med.get("price") for med in medicines if isinstance(med.get("price"), (int, float)) and med.get("price") is not None]
+
+        if not valid_prices:
+            return {"error": "No valid prices available to calculate average price."}
+
+        total_price = sum(valid_prices)
+        average_price = total_price / len(valid_prices)
+
+    return {"average": average_price}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
