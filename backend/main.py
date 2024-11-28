@@ -156,5 +156,6 @@ def calculate_average_price():
     return {"average": average_price}
 
 
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
