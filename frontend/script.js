@@ -281,21 +281,21 @@ function addMedicine() {
 }
 
 function displayFormMessage(message, type) {
-    // const formMessage = document.getElementById("formMessage");
-    // formMessage.textContent = message;
-    // formMessage.className = type; // Add 'success' or 'error' class to style the message
+    const formMessage = document.getElementById("formMessage");
+    formMessage.textContent = message;
+    formMessage.className = type; // Add 'success' or 'error' class to style the message
     
     //Toast Version
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
+    // const toast = document.createElement('div');
+    // toast.className = `toast ${type}`;
+    // toast.textContent = message;
 
-    document.body.appendChild(toast);
+    // document.body.appendChild(toast);
 
-    // Remove the toast after 3 seconds
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
+    // // Remove the toast after 3 seconds
+    // setTimeout(() => {
+    //     toast.remove();
+    // }, 3000);
 
 
 }
