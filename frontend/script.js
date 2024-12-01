@@ -195,7 +195,7 @@ function savePrice(medicine, inputField, editButton) {
             editIcon.alt = 'Edit';
             editIcon.className = 'icon';
             editButton.appendChild(editIcon);
-            displayToast('Price Updated', 'Sucess')
+            //displayToast('Price Updated', 'Sucess')
 
             // Re-enable the edit functionality
             editButton.onclick = () => toggleEditPrice(medicine, updatedPriceElement, editButton);
@@ -271,47 +271,50 @@ function addMedicine() {
         return response.json();
     })
     .then(data => {
-        displayFormMessage(data.message, "success");
+        displayFormMessage(data.message || "Medicine has been added.", "success");
         fetchMedicines(); // Refresh the medicines list
+        
     })
     .catch(error => {
         console.error('Error:', error);
-        displayFormMessage("Error adding medicine. Please try again.", "error");
+        displayFormMessage(data.msg, "error");
+        displayFormMessage(error.message || "Error adding medicine. Please try again.", "error");
     });
 }
 
 function displayFormMessage(message, type) {
     const formMessage = document.getElementById("formMessage");
     formMessage.textContent = message;
-    formMessage.className = type; // Add 'success' or 'error' class to style the message
-    
-    //Toast Version
-    // const toast = document.createElement('div');
-    // toast.className = `toast ${type}`;
-    // toast.textContent = message;
+    formMessage.className = type;
 
-    // document.body.appendChild(toast);
+    // Ensure opacity is reset if using fade-out effects
+    formMessage.style.opacity = "1";
 
-    // // Remove the toast after 3 seconds
-    // setTimeout(() => {
-    //     toast.remove();
-    // }, 3000);
+    if (type === "success") {
+        formMessage.textContent = "Success, Medicine has been added";
+    } else {
+        formMessage.textContent = "Error";
+    }
 
-
-}
-
-function displayToast(message, type) {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-
-    document.body.appendChild(toast);
-
-    // Remove the toast after 3 seconds
+    // Message stays visible for 10 seconds, then disappears
     setTimeout(() => {
-        toast.remove();
-    }, 3000);
+        formMessage.textContent = ""; // Clear the message
+        formMessage.className = "";  // Reset the class
+    }, 10000); // 10 seconds
 }
+
+// function displayToast(message, type) {
+//     const toast = document.createElement('div');
+//     toast.className = `toast ${type}`;
+//     toast.textContent = message;
+
+//     document.body.appendChild(toast);
+
+//     
+//     setTimeout(() => {
+//         toast.remove();
+//     }, 3000);
+// }
 
 function calculateAveragePrice() {
     fetch('http://127.0.0.1:8000/average-price')
